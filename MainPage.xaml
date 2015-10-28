@@ -30,8 +30,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="403,365,546,83">
-            <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="10,50,10,10" TextAlignment="Center" FontSize="26.667" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="123,386,164,104" Width="993">
+            <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="10,50,0,10" TextAlignment="Center" FontSize="24" Height="263" Width="973" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
         </StackPanel>
         <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="123,118,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="RedButton_Click"/>
         <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="899,118,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="BlueButton_Click"/>

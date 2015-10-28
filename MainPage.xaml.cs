@@ -42,13 +42,20 @@ namespace Blinky
                 GpioStatus.Text = "There is no GPIO controller on this device.";
                 return;
             }
+            try
+            {
+                pin = gpio.OpenPin(PinNum);
+                pinValue = HiOrLo;
+                pin.Write(pinValue);
+                pin.SetDriveMode(GpioPinDriveMode.Output);
+                GpioStatus.Text = "GPIO pin " + PinNum.ToString() + " set correctly.";
+            }
+            catch (Exception ex)
+            {
 
-            pin = gpio.OpenPin(PinNum);
-            pinValue = HiOrLo;
-            pin.Write(pinValue);
-            pin.SetDriveMode(GpioPinDriveMode.Output);
-
-            GpioStatus.Text = "GPIO pin " + PinNum.ToString() + " set correctly.";
+                GpioStatus.Text = "Exception when setting pin #" + PinNum.ToString() + ".  Error is " + ex.Message
+                    + " Sharing Mode is " + pin.SharingMode.ToString()+ ".";
+            }
 
         }
 
