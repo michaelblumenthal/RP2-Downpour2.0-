@@ -17,7 +17,9 @@ namespace Blinky
         private GpioPinValue RedPinState = GpioPinValue.High;
         private GpioPinValue GreenPinState = GpioPinValue.High;
         private GpioPinValue BluePinState = GpioPinValue.High;
-        private GpioPin pin;
+        private GpioPin RedPin;
+        private GpioPin GreenPin;
+        private GpioPin BluePin;
         private GpioPinValue pinValue;
 
 
@@ -25,35 +27,42 @@ namespace Blinky
         {
             InitializeComponent();
 
-            SetState(RED_PIN, GpioPinValue.High);
-            SetState(GREEN_PIN, GpioPinValue.High);
-            SetState(BLUE_PIN,GpioPinValue.High);
+            RedPin = initPin(RED_PIN);
+            GreenPin = initPin(GREEN_PIN);
+            BluePin = initPin(BLUE_PIN);
+
+            SetState(RedPin, GpioPinValue.High);
+            SetState(GreenPin, GpioPinValue.High);
+            SetState(BluePin,GpioPinValue.High);
 
         }
 
-        private void SetState(int PinNum, GpioPinValue HiOrLo)
+        private GpioPin initPin(int PinNum)
         {
             var gpio = GpioController.GetDefault();
-
-            // Show an error if there is no GPIO controller
             if (gpio == null)
             {
-                pin = null;
+                // Show an error if there is no GPIO controller
                 GpioStatus.Text = "There is no GPIO controller on this device.";
-                return;
+                throw new Exception(GpioStatus.Text);
+                
             }
+            return gpio.OpenPin(PinNum);
+        }
+
+        private void SetState(GpioPin pin, GpioPinValue HiOrLo)
+        {
+            
             try
             {
-                pin = gpio.OpenPin(PinNum);
-                pinValue = HiOrLo;
-                pin.Write(pinValue);
+                pin.Write(HiOrLo);
                 pin.SetDriveMode(GpioPinDriveMode.Output);
-                GpioStatus.Text = "GPIO pin " + PinNum.ToString() + " set correctly.";
+                GpioStatus.Text = "GPIO pin " + pin.PinNumber.ToString() + " set correctly.";
             }
             catch (Exception ex)
             {
 
-                GpioStatus.Text = "Exception when setting pin #" + PinNum.ToString() + ".  Error is " + ex.Message
+                GpioStatus.Text = "Exception when setting pin #" + pin.PinNumber.ToString() + ".  Error is " + ex.Message
                     + " Sharing Mode is " + pin.SharingMode.ToString()+ ".";
             }
 
@@ -62,18 +71,15 @@ namespace Blinky
    
 
 
-
-
-
         private void RedButton_Click(object sender, RoutedEventArgs e)
         {
             if (RedPinState == GpioPinValue.High)
             {
-                SetState(RED_PIN, GpioPinValue.Low);
+                SetState(RedPin, GpioPinValue.Low);
                 RedPinState = GpioPinValue.Low;
             } else
             {
-                SetState(RED_PIN, GpioPinValue.High);
+                SetState(RedPin, GpioPinValue.High);
                 RedPinState = GpioPinValue.High;
             }
         }
@@ -82,12 +88,12 @@ namespace Blinky
         {
             if (GreenPinState == GpioPinValue.High)
             {
-                SetState(GREEN_PIN, GpioPinValue.Low);
+                SetState(GreenPin, GpioPinValue.Low);
                 GreenPinState = GpioPinValue.Low;
             }
             else
             {
-                SetState(GREEN_PIN, GpioPinValue.High);
+                SetState(GreenPin, GpioPinValue.High);
                 GreenPinState = GpioPinValue.High;
             }
         }
@@ -96,12 +102,12 @@ namespace Blinky
         {
             if (BluePinState == GpioPinValue.High)
             {
-                SetState(BLUE_PIN, GpioPinValue.Low);
+                SetState(BluePin, GpioPinValue.Low);
                 BluePinState = GpioPinValue.Low;
             }
             else
             {
-                SetState(BLUE_PIN, GpioPinValue.High);
+                SetState(BluePin, GpioPinValue.High);
                 BluePinState = GpioPinValue.High;
             }
         }
