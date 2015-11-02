@@ -30,11 +30,16 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="123,386,164,104" Width="993">
-            <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="10,50,0,10" TextAlignment="Center" FontSize="24" Height="263" Width="973" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="812,48,10,10" Width="458" Height="662">
+            <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="10,50,0,10" TextAlignment="Center" FontSize="24" Height="601" Width="438" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
         </StackPanel>
-        <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="123,118,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="RedButton_Click"/>
-        <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="899,118,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="BlueButton_Click"/>
-        <Button x:Name="GreenButton" Content="Green" HorizontalAlignment="Left" Margin="517,118,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#334AB628" Click="GreenButton_Click"/>
+        <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="42,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="RedButton_Click"/>
+        <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="559,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="BlueButton_Click"/>
+        <Button x:Name="GreenButton" Content="Green" HorizontalAlignment="Left" Margin="297,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#334AB628" Click="GreenButton_Click"/>
+        <TextBox x:Name="RedHashtagBox" HorizontalAlignment="Left" Margin="42,246,0,0" TextWrapping="Wrap" Text="#Red" VerticalAlignment="Top" Width="217" PlaceholderText="Red Hashtag"/>
+        <TextBox x:Name="TwitterAccountBox" HorizontalAlignment="Left" Margin="297,246,0,0" TextWrapping="Wrap" Text="@SocialDownpour" VerticalAlignment="Top" Width="217" PlaceholderText="Twitter Account"/>
+        <TextBox x:Name="BlueHashtagBox" HorizontalAlignment="Left" Margin="559,246,0,0" TextWrapping="Wrap" Text="#Blue" VerticalAlignment="Top" Width="217" PlaceholderText="Blue Hashtag"/>
+        <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="297,315,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
+        <Button x:Name="GoButton" Content="Go" HorizontalAlignment="Left" Height="112" Margin="297,402,0,0" VerticalAlignment="Top" Width="217" Click="GoButton_Click"/>
     </Grid>
 </Page>

@@ -14,13 +14,16 @@ namespace Blinky
         private const int RED_PIN = 5;
         private const int GREEN_PIN = 6;
         private const int BLUE_PIN = 13;
+        private string TwitterSinceID = "";
         private GpioPinValue RedPinState = GpioPinValue.High;
         private GpioPinValue GreenPinState = GpioPinValue.High;
         private GpioPinValue BluePinState = GpioPinValue.High;
         private GpioPin RedPin;
         private GpioPin GreenPin;
         private GpioPin BluePin;
-        private GpioPinValue pinValue;
+        private SolidColorBrush VotingOpenBrush = new SolidColorBrush(Windows.UI.Colors.LimeGreen);
+        private SolidColorBrush VotingClosedBrush = new SolidColorBrush(Windows.UI.Colors.DarkGreen);
+        private DispatcherTimer timer;
 
 
         public MainPage()
@@ -33,7 +36,7 @@ namespace Blinky
 
             SetState(RedPin, GpioPinValue.High);
             SetState(GreenPin, GpioPinValue.High);
-            SetState(BluePin,GpioPinValue.High);
+            SetState(BluePin, GpioPinValue.High);
 
         }
 
@@ -45,14 +48,14 @@ namespace Blinky
                 // Show an error if there is no GPIO controller
                 GpioStatus.Text = "There is no GPIO controller on this device.";
                 throw new Exception(GpioStatus.Text);
-                
+
             }
             return gpio.OpenPin(PinNum);
         }
 
         private void SetState(GpioPin pin, GpioPinValue HiOrLo)
         {
-            
+
             try
             {
                 pin.Write(HiOrLo);
@@ -63,12 +66,12 @@ namespace Blinky
             {
 
                 GpioStatus.Text = "Exception when setting pin #" + pin.PinNumber.ToString() + ".  Error is " + ex.Message
-                    + " Sharing Mode is " + pin.SharingMode.ToString()+ ".";
+                    + " Sharing Mode is " + pin.SharingMode.ToString() + ".";
             }
 
         }
 
-   
+
 
 
         private void RedButton_Click(object sender, RoutedEventArgs e)
@@ -77,7 +80,8 @@ namespace Blinky
             {
                 SetState(RedPin, GpioPinValue.Low);
                 RedPinState = GpioPinValue.Low;
-            } else
+            }
+            else
             {
                 SetState(RedPin, GpioPinValue.High);
                 RedPinState = GpioPinValue.High;
@@ -110,6 +114,63 @@ namespace Blinky
                 SetState(BluePin, GpioPinValue.High);
                 BluePinState = GpioPinValue.High;
             }
+        }
+
+        private void GoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            SetState(RedPin, GpioPinValue.High);
+            SetState(GreenPin, GpioPinValue.Low);
+            SetState(BluePin, GpioPinValue.High);
+            GreenButton.Content = "Voting Open";
+            GreenButton.Background = VotingOpenBrush;
+           TwitterSinceID =  getBaselineTweetsForToday();
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMinutes(double.Parse(VotingIntervalBox.Text));
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private string getBaselineTweetsForToday()
+        {
+            //TODO
+            return "";
+        }
+
+        private void Timer_Tick(object sender, object e)
+        {
+            timer.Stop();
+            SetState(GreenPin, GpioPinValue.High);
+            GreenButton.Content = "Voting Closed";
+            GreenButton.Background = VotingClosedBrush;
+
+            int RedCount = 0;
+            int BlueCount = 0;
+
+            GetCountsFromTwitter(ref RedCount, ref BlueCount);
+
+            if (RedCount > BlueCount)
+            {
+                SetState(RedPin, GpioPinValue.Low);
+            }
+            if (RedCount > BlueCount)
+            {
+                SetState(BluePin, GpioPinValue.Low);
+            }
+
+            if (RedCount == BlueCount)
+            {
+                SetState(RedPin, GpioPinValue.Low);
+                SetState(BluePin, GpioPinValue.Low);
+            }
+
+        }
+
+        private void GetCountsFromTwitter(ref int redCount, ref int blueCount)
+        {
+            //TODO Actually talk to twitter
+            redCount = 1;
+            blueCount = 0;
         }
     }
 }
