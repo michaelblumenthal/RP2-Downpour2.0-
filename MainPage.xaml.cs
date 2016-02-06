@@ -14,13 +14,18 @@ namespace Blumenthalit.SocialUproar
         private const int RED_PIN = 5;
         private const int GREEN_PIN = 6;
         private const int BLUE_PIN = 13;
-        private string TwitterSinceID = "";
+        private const int LEFT_MOTOR_PIN = 19;
+        private const int RIGHT_MOTOR_PIN = 20;
         private GpioPinValue RedPinState = GpioPinValue.High;
         private GpioPinValue GreenPinState = GpioPinValue.High;
         private GpioPinValue BluePinState = GpioPinValue.High;
+        private GpioPinValue LeftMotorPinState = GpioPinValue.High;
+        private GpioPinValue RightMotorPinState = GpioPinValue.High;
         private GpioPin RedPin;
         private GpioPin GreenPin;
         private GpioPin BluePin;
+        private GpioPin LeftMotorPin;
+        private GpioPin RightMotorPin;
         private SolidColorBrush VotingOpenBrush = new SolidColorBrush(Windows.UI.Colors.LimeGreen);
         private SolidColorBrush VotingClosedBrush = new SolidColorBrush(Windows.UI.Colors.DarkGreen);
         private DispatcherTimer timer;
@@ -33,10 +38,15 @@ namespace Blumenthalit.SocialUproar
             RedPin = initPin(RED_PIN);
             GreenPin = initPin(GREEN_PIN);
             BluePin = initPin(BLUE_PIN);
+            LeftMotorPin = initPin(LEFT_MOTOR_PIN);
+            RightMotorPin = initPin(RIGHT_MOTOR_PIN);
 
             SetState(RedPin, GpioPinValue.High);
             SetState(GreenPin, GpioPinValue.High);
             SetState(BluePin, GpioPinValue.High);
+            SetState(LeftMotorPin, GpioPinValue.Low);
+            SetState(RightMotorPin, GpioPinValue.Low);
+
 
         }
 
@@ -60,7 +70,7 @@ namespace Blumenthalit.SocialUproar
             {
                 pin.Write(HiOrLo);
                 pin.SetDriveMode(GpioPinDriveMode.Output);
-                GpioStatus.Text = "GPIO pin " + pin.PinNumber.ToString() + " set correctly.";
+                GpioStatus.Text += "GPIO pin " + pin.PinNumber.ToString() + " set correctly.";
             }
             catch (Exception ex)
             {
@@ -124,19 +134,13 @@ namespace Blumenthalit.SocialUproar
             SetState(BluePin, GpioPinValue.High);
             GreenButton.Content = "Voting Open";
             GreenButton.Background = VotingOpenBrush;
-           TwitterSinceID =  getBaselineTweetsForToday();
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMinutes(double.Parse(VotingIntervalBox.Text));
             timer.Tick += Timer_Tick;
             timer.Start();
         }
 
-        private string getBaselineTweetsForToday()
-        {
-            //TODO
-            return "";
-        }
-
+   
         private void Timer_Tick(object sender, object e)
         {
             timer.Stop();
@@ -144,24 +148,30 @@ namespace Blumenthalit.SocialUproar
             GreenButton.Content = "Voting Closed";
             GreenButton.Background = VotingClosedBrush;
 
-            int RedCount = 0;
-            int BlueCount = 0;
+            //TODO:call web service to get actual counts from web service
 
-            //Blumenthalit.SocialUproar.TwitterQueryer.QueryTwitter.
+            int RedCount = (new Random()).Next();
+            RedTweetCountBox.Text = RedCount.ToString();
+            int BlueCount = (new Random()).Next();
+            BlueTweetCountBox.Text = BlueCount.ToString();
 
             if (RedCount > BlueCount)
             {
                 SetState(RedPin, GpioPinValue.Low);
+                SetState(LeftMotorPin, GpioPinValue.High);
             }
             if (RedCount > BlueCount)
             {
                 SetState(BluePin, GpioPinValue.Low);
+                SetState(RightMotorPin, GpioPinValue.High);
             }
 
             if (RedCount == BlueCount)
             {
                 SetState(RedPin, GpioPinValue.Low);
+                SetState(LeftMotorPin, GpioPinValue.High);
                 SetState(BluePin, GpioPinValue.Low);
+                SetState(RightMotorPin, GpioPinValue.High);
             }
 
         }
@@ -171,6 +181,16 @@ namespace Blumenthalit.SocialUproar
             //TODO Actually talk to twitter
             redCount = 1;
             blueCount = 0;
+        }
+
+        private void LeftMotorButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RightMotorButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

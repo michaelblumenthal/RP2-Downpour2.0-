@@ -36,12 +36,13 @@
         <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="42,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="RedButton_Click"/>
         <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="559,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="BlueButton_Click"/>
         <Button x:Name="GreenButton" Content="Green" HorizontalAlignment="Left" Margin="297,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#334AB628" Click="GreenButton_Click"/>
-        <TextBox x:Name="RedHashtagBox" HorizontalAlignment="Left" Margin="42,246,0,0" TextWrapping="Wrap" Text="#Red" VerticalAlignment="Top" Width="217" PlaceholderText="Red Hashtag"/>
-        <TextBox x:Name="TwitterAccountBox" HorizontalAlignment="Left" Margin="297,246,0,0" TextWrapping="Wrap" Text="@SocialDownpour" VerticalAlignment="Top" Width="217" PlaceholderText="Twitter Account"/>
-        <TextBox x:Name="BlueHashtagBox" HorizontalAlignment="Left" Margin="559,246,0,0" TextWrapping="Wrap" Text="#Blue" VerticalAlignment="Top" Width="217" PlaceholderText="Blue Hashtag"/>
-        <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="297,315,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
-        <Button x:Name="GoButton" Content="Go" HorizontalAlignment="Left" Height="112" Margin="297,402,0,0" VerticalAlignment="Top" Width="217" Click="GoButton_Click"/>
-        <TextBox x:Name="RedTweetCountBox" HorizontalAlignment="Left" Margin="42,315,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Red Tweet Count"/>
-        <TextBox x:Name="BlueTweetCountBox" HorizontalAlignment="Left" Margin="559,315,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Blue Tweet Count"/>
+        <TextBox x:Name="RedHashtagBox" HorizontalAlignment="Left" Margin="42,408,0,0" TextWrapping="Wrap" Text="Red" VerticalAlignment="Top" Width="217" PlaceholderText="Red" IsReadOnly="True" BorderBrush="Black"/>
+        <TextBox x:Name="BlueHashtagBox" HorizontalAlignment="Left" Margin="559,408,0,0" TextWrapping="Wrap" Text="Blue" VerticalAlignment="Top" Width="217" PlaceholderText="Blue" BorderBrush="Black" IsReadOnly="True"/>
+        <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="297,477,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
+        <Button x:Name="GoButton" Content="Go" HorizontalAlignment="Left" Height="112" Margin="297,545,0,0" VerticalAlignment="Top" Width="217" Click="GoButton_Click"/>
+        <TextBox x:Name="RedTweetCountBox" HorizontalAlignment="Left" Margin="42,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Red Tweet Count"/>
+        <TextBox x:Name="BlueTweetCountBox" HorizontalAlignment="Left" Margin="559,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Blue Tweet Count"/>
+        <Button x:Name="LeftMotorButton" Content="Left Motor" HorizontalAlignment="Left" Margin="42,223,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="LeftMotorButton_Click"/>
+        <Button x:Name="RightMotorButton" Content="Right Motor Button" HorizontalAlignment="Left" Margin="559,223,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="RightMotorButton_Click"/>
     </Grid>
 </Page>
