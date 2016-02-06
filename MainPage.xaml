@@ -43,6 +43,6 @@
         <TextBox x:Name="RedTweetCountBox" HorizontalAlignment="Left" Margin="42,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Red Tweet Count"/>
         <TextBox x:Name="BlueTweetCountBox" HorizontalAlignment="Left" Margin="559,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Blue Tweet Count"/>
         <Button x:Name="LeftMotorButton" Content="Left Motor" HorizontalAlignment="Left" Margin="42,223,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="LeftMotorButton_Click"/>
-        <Button x:Name="RightMotorButton" Content="Right Motor Button" HorizontalAlignment="Left" Margin="559,223,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="RightMotorButton_Click"/>
+        <Button x:Name="RightMotorButton" Content="Right Motor" HorizontalAlignment="Left" Margin="559,223,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="RightMotorButton_Click"/>
     </Grid>
 </Page>
