@@ -1,6 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,9 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
-
-namespace Blumenthalit.SocialUproar
+namespace Blumenthalit.SocialUproar.TwitterTestHarness
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -32,8 +28,8 @@ namespace Blumenthalit.SocialUproar
         /// </summary>
         public App()
         {
-            InitializeComponent();
-            Suspending += OnSuspending;
+            this.InitializeComponent();
+            this.Suspending += OnSuspending;
         }
 
         /// <summary>
@@ -47,7 +43,7 @@ namespace Blumenthalit.SocialUproar
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                DebugSettings.EnableFrameRateCounter = true;
+                this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
 
@@ -59,8 +55,6 @@ namespace Blumenthalit.SocialUproar
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-                // Set the default language
-                rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 

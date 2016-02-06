@@ -4,10 +4,10 @@ using System;
 using Windows.Devices.Gpio;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 
-namespace Blinky
+
+namespace Blumenthalit.SocialUproar
 {
     public sealed partial class MainPage : Page
     {
@@ -147,7 +147,7 @@ namespace Blinky
             int RedCount = 0;
             int BlueCount = 0;
 
-            GetCountsFromTwitter(ref RedCount, ref BlueCount);
+            //Blumenthalit.SocialUproar.TwitterQueryer.QueryTwitter.
 
             if (RedCount > BlueCount)
             {
