@@ -1,0 +1,32 @@
+{
+  "siteName": {
+    "value": "SocialUproar"
+  },
+  "hostingPlanName": {
+    "value": "SocialUproarAppServicePlan"
+  },
+  "siteLocation": {
+    "value": "North Central US"
+  },
+  "sku": {
+    "value": "Free"
+  },
+  "workerSize": {
+    "value": "0"
+  },
+  "serverName": {
+    "value": "socupdb"
+  },
+  "serverLocation": {
+    "value": "North Central US"
+  },
+  "administratorLogin": {
+    "value": "Hermes"
+  },
+  "administratorLoginPassword": {
+    "value": "J1irm6oVU6ZeQ8qui6Jz"
+  },
+  "databaseName": {
+    "value": "SocialUproar_db"
+  }
+}
