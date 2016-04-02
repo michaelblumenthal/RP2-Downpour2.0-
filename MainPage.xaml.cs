@@ -132,6 +132,8 @@ namespace Blumenthalit.SocialUproar
             SetState(RedPin, GpioPinValue.High);
             SetState(GreenPin, GpioPinValue.Low);
             SetState(BluePin, GpioPinValue.High);
+            RedTweetCountBox.Text = "0";
+            BlueTweetCountBox.Text = "0";
             GreenButton.Content = "Voting Open";
             GreenButton.Background = VotingOpenBrush;
             timer = new DispatcherTimer();
@@ -152,7 +154,7 @@ namespace Blumenthalit.SocialUproar
 
             int RedCount = (new Random()).Next();
             RedTweetCountBox.Text = RedCount.ToString();
-            int BlueCount = (new Random()).Next();
+            int BlueCount = (new Random(42)).Next();
             BlueTweetCountBox.Text = BlueCount.ToString();
 
             if (RedCount > BlueCount)
@@ -160,7 +162,7 @@ namespace Blumenthalit.SocialUproar
                 SetState(RedPin, GpioPinValue.Low);
                 SetState(LeftMotorPin, GpioPinValue.High);
             }
-            if (RedCount > BlueCount)
+            if (RedCount < BlueCount)
             {
                 SetState(BluePin, GpioPinValue.Low);
                 SetState(RightMotorPin, GpioPinValue.High);
