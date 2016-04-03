@@ -28,6 +28,11 @@ namespace Blumenthalit.SocialUproar
         private GpioPin RightMotorPin;
         private SolidColorBrush VotingOpenBrush = new SolidColorBrush(Windows.UI.Colors.LimeGreen);
         private SolidColorBrush VotingClosedBrush = new SolidColorBrush(Windows.UI.Colors.DarkGreen);
+        private SolidColorBrush RedOnBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+        private SolidColorBrush RedOffBrush = new SolidColorBrush(Windows.UI.Colors.DarkRed);
+        private SolidColorBrush BlueOnBrush = new SolidColorBrush(Windows.UI.Colors.Blue);
+        private SolidColorBrush BlueOffBrush = new SolidColorBrush(Windows.UI.Colors.DarkBlue);
+
         private DispatcherTimer timer;
 
 
@@ -90,11 +95,13 @@ namespace Blumenthalit.SocialUproar
             {
                 SetState(RedPin, GpioPinValue.Low);
                 RedPinState = GpioPinValue.Low;
+                RedButton.Background = RedOnBrush;
             }
             else
             {
                 SetState(RedPin, GpioPinValue.High);
                 RedPinState = GpioPinValue.High;
+                RedButton.Background = RedOffBrush;
             }
         }
 
@@ -104,11 +111,13 @@ namespace Blumenthalit.SocialUproar
             {
                 SetState(GreenPin, GpioPinValue.Low);
                 GreenPinState = GpioPinValue.Low;
+                GreenButton.Background = VotingOpenBrush;
             }
             else
             {
                 SetState(GreenPin, GpioPinValue.High);
                 GreenPinState = GpioPinValue.High;
+                GreenButton.Background = VotingClosedBrush;
             }
         }
 
@@ -118,11 +127,13 @@ namespace Blumenthalit.SocialUproar
             {
                 SetState(BluePin, GpioPinValue.Low);
                 BluePinState = GpioPinValue.Low;
+                BlueButton.Background = BlueOnBrush;
             }
             else
             {
                 SetState(BluePin, GpioPinValue.High);
                 BluePinState = GpioPinValue.High;
+                BlueButton.Background = BlueOffBrush;
             }
         }
 
@@ -130,12 +141,17 @@ namespace Blumenthalit.SocialUproar
         {
 
             SetState(RedPin, GpioPinValue.High);
+            RedButton.Background = RedOffBrush;
             SetState(GreenPin, GpioPinValue.Low);
             SetState(BluePin, GpioPinValue.High);
+            BlueButton.Background = BlueOffBrush;
+
             RedTweetCountBox.Text = "0";
             BlueTweetCountBox.Text = "0";
+
             GreenButton.Content = "Voting Open";
             GreenButton.Background = VotingOpenBrush;
+
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMinutes(double.Parse(VotingIntervalBox.Text));
             timer.Tick += Timer_Tick;
@@ -161,11 +177,15 @@ namespace Blumenthalit.SocialUproar
             {
                 SetState(RedPin, GpioPinValue.Low);
                 SetState(LeftMotorPin, GpioPinValue.High);
+                RedButton.Background = RedOnBrush;
+                BlueButton.Background = BlueOffBrush;
             }
             if (RedCount < BlueCount)
             {
                 SetState(BluePin, GpioPinValue.Low);
                 SetState(RightMotorPin, GpioPinValue.High);
+                RedButton.Background = RedOffBrush;
+                BlueButton.Background = BlueOnBrush;
             }
 
             if (RedCount == BlueCount)
@@ -174,6 +194,8 @@ namespace Blumenthalit.SocialUproar
                 SetState(LeftMotorPin, GpioPinValue.High);
                 SetState(BluePin, GpioPinValue.Low);
                 SetState(RightMotorPin, GpioPinValue.High);
+                BlueButton.Background = BlueOnBrush;
+                RedButton.Background = RedOnBrush;
             }
 
         }
