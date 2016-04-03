@@ -70,7 +70,7 @@ namespace Blumenthalit.SocialUproar
             {
                 pin.Write(HiOrLo);
                 pin.SetDriveMode(GpioPinDriveMode.Output);
-                GpioStatus.Text += "GPIO pin " + pin.PinNumber.ToString() + " set correctly.";
+                GpioStatus.Text = "GPIO pin " + pin.PinNumber.ToString() + " set correctly.";
             }
             catch (Exception ex)
             {
@@ -152,9 +152,9 @@ namespace Blumenthalit.SocialUproar
 
             //TODO:call web service to get actual counts from web service
 
-            int RedCount = (new Random()).Next();
+            int RedCount = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(100);
             RedTweetCountBox.Text = RedCount.ToString();
-            int BlueCount = (new Random(42)).Next();
+            int BlueCount = (new Random(int.Parse(DateTime.Now.ToString("ss"))+1)).Next(100);
             BlueTweetCountBox.Text = BlueCount.ToString();
 
             if (RedCount > BlueCount)
@@ -187,12 +187,12 @@ namespace Blumenthalit.SocialUproar
 
         private void LeftMotorButton_Click(object sender, RoutedEventArgs e)
         {
-
+            GpioStatus.Text = "Virtual Putt Putt Bang. Left Motor not implemented yet.";
         }
 
         private void RightMotorButton_Click(object sender, RoutedEventArgs e)
         {
-
+            GpioStatus.Text = "Virtual Vroom! Right Motor not implemented yet.";
         }
     }
 }
