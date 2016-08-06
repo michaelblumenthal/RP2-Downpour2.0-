@@ -19,13 +19,13 @@ namespace Blumenthalit.SocialUproar
         private GpioPinValue RedPinState = GpioPinValue.High;
         private GpioPinValue GreenPinState = GpioPinValue.High;
         private GpioPinValue BluePinState = GpioPinValue.High;
-        private GpioPinValue LeftMotorPinState = GpioPinValue.High;
-        private GpioPinValue RightMotorPinState = GpioPinValue.High;
+        private GpioPinValue BlueMotorPinState = GpioPinValue.High;
+        //private GpioPinValue RightMotorPinState = GpioPinValue.High;
         private GpioPin RedPin;
         private GpioPin GreenPin;
         private GpioPin BluePin;
-        private GpioPin LeftMotorPin;
-        private GpioPin RightMotorPin;
+        private GpioPin BlueMotorPin;
+     //   private GpioPin RightMotorPin;
         private SolidColorBrush VotingOpenBrush = new SolidColorBrush(Windows.UI.Colors.LimeGreen);
         private SolidColorBrush VotingClosedBrush = new SolidColorBrush(Windows.UI.Colors.DarkGreen);
         private SolidColorBrush RedOnBrush = new SolidColorBrush(Windows.UI.Colors.Red);
@@ -35,6 +35,8 @@ namespace Blumenthalit.SocialUproar
 
         private DispatcherTimer timer;
 
+        int BlueVoteCount = 0;
+        int RedVoteCount = 0;
 
         public MainPage()
         {
@@ -43,14 +45,14 @@ namespace Blumenthalit.SocialUproar
             RedPin = initPin(RED_PIN);
             GreenPin = initPin(GREEN_PIN);
             BluePin = initPin(BLUE_PIN);
-            LeftMotorPin = initPin(LEFT_MOTOR_PIN);
-            RightMotorPin = initPin(RIGHT_MOTOR_PIN);
+            BlueMotorPin = initPin(LEFT_MOTOR_PIN);
+//            RightMotorPin = initPin(RIGHT_MOTOR_PIN);
 
             SetState(RedPin, GpioPinValue.High);
             SetState(GreenPin, GpioPinValue.High);
             SetState(BluePin, GpioPinValue.High);
-            SetState(LeftMotorPin, GpioPinValue.Low);
-            SetState(RightMotorPin, GpioPinValue.Low);
+            SetState(BlueMotorPin, GpioPinValue.Low);
+            //SetState(RightMotorPin, GpioPinValue.Low);
 
 
         }
@@ -153,7 +155,7 @@ namespace Blumenthalit.SocialUproar
             GreenButton.Background = VotingOpenBrush;
 
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMinutes(double.Parse(VotingIntervalBox.Text));
+            timer.Interval = TimeSpan.FromSeconds(double.Parse(VotingIntervalBox.Text));
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -163,58 +165,132 @@ namespace Blumenthalit.SocialUproar
         {
             timer.Stop();
             SetState(GreenPin, GpioPinValue.High);
+            GreenPinState = GpioPinValue.High;
             GreenButton.Content = "Voting Closed";
             GreenButton.Background = VotingClosedBrush;
 
-            //TODO:call web service to get actual counts from web service
+            if (VoteCountMode.IsOn)
+                {
+                    GetCountsFromWeb();
+                }
+                else { 
+                    RedVoteCount = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(100);
+                    BlueVoteCount = (new Random(int.Parse(DateTime.Now.ToString("ss"))+1)).Next(100);
+                }
 
-            int RedCount = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(100);
-            RedTweetCountBox.Text = RedCount.ToString();
-            int BlueCount = (new Random(int.Parse(DateTime.Now.ToString("ss"))+1)).Next(100);
-            BlueTweetCountBox.Text = BlueCount.ToString();
+            RedTweetCountBox.Text = RedVoteCount.ToString();
+            BlueTweetCountBox.Text = BlueVoteCount.ToString();
 
-            if (RedCount > BlueCount)
+            if (RedVoteCount > BlueVoteCount)
             {
                 SetState(RedPin, GpioPinValue.Low);
-                SetState(LeftMotorPin, GpioPinValue.High);
+                RedPinState = GpioPinValue.Low;
+                //              SetState(RightMotorPin, GpioPinValue.High);
+                SetState(BlueMotorPin, GpioPinValue.Low);
+                BlueMotorPinState = GpioPinValue.Low;
                 RedButton.Background = RedOnBrush;
                 BlueButton.Background = BlueOffBrush;
             }
-            if (RedCount < BlueCount)
+            if (RedVoteCount < BlueVoteCount)
             {
                 SetState(BluePin, GpioPinValue.Low);
-                SetState(RightMotorPin, GpioPinValue.High);
+                SetState(BlueMotorPin, GpioPinValue.High);
+                BluePinState = GpioPinValue.Low;
+                BlueMotorPinState = GpioPinValue.High;
                 RedButton.Background = RedOffBrush;
                 BlueButton.Background = BlueOnBrush;
             }
 
-            if (RedCount == BlueCount)
+            if (RedVoteCount == BlueVoteCount)
             {
                 SetState(RedPin, GpioPinValue.Low);
-                SetState(LeftMotorPin, GpioPinValue.High);
+//                SetState(RightMotorPin, GpioPinValue.High);
                 SetState(BluePin, GpioPinValue.Low);
-                SetState(RightMotorPin, GpioPinValue.High);
+                SetState(BlueMotorPin, GpioPinValue.High);
+                BluePinState = GpioPinValue.Low;
+                BlueMotorPinState = GpioPinValue.High;
                 BlueButton.Background = BlueOnBrush;
                 RedButton.Background = RedOnBrush;
             }
 
         }
 
-        private void GetCountsFromTwitter(ref int redCount, ref int blueCount)
+        private async void GetCountsFromWeb()
         {
-            //TODO Actually talk to twitter
-            redCount = 1;
-            blueCount = 0;
+            //Create an HTTP client object
+            Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
+
+            //Add a user-agent header to the GET request. 
+            var headers = httpClient.DefaultRequestHeaders;
+
+            //The safe way to add a header value is to use the TryParseAdd method and verify the return value is true,
+            //especially if the header value is coming from user input.
+            string header = "ie";
+            if (!headers.UserAgent.TryParseAdd(header))
+            {
+                throw new Exception("Invalid header value: " + header);
+            }
+
+            header = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)";
+            if (!headers.UserAgent.TryParseAdd(header))
+            {
+                throw new Exception("Invalid header value: " + header);
+            }
+
+            Uri requestUri = new Uri(RestUrlBox.Text);
+
+            //Send the GET request asynchronously and retrieve the response as a string.
+            Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
+            string httpResponseBody = "";
+
+            try
+            {
+                //Send the GET request
+                httpResponse =  await httpClient.GetAsync(requestUri);
+                httpResponse.EnsureSuccessStatusCode();
+                httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                debugText.Text += httpResponseBody;
+                string rednum = httpResponseBody.Substring("[{\"Color\":\"Red\",\"Count\":".Length);
+                string blunum = rednum;
+                int curlyLoc = rednum.IndexOf("}");
+                rednum = rednum.Substring(0, curlyLoc);
+                debugText.Text = "Rednum=" + rednum;
+                int.TryParse(rednum, out RedVoteCount);
+                string bluenum = blunum.Substring(curlyLoc + 2 + "{\"Color\":\"Blue\",\"Count\":".Length);
+                bluenum = bluenum.Substring(0, bluenum.Length - 2);
+                debugText.Text += "\n Bluenum=" + bluenum;
+                int.TryParse(bluenum, out BlueVoteCount);
+            }
+            catch (Exception ex)
+            {
+                httpResponseBody = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+                debugText.Text = httpResponseBody;
+            }
+
+            
         }
 
-        private void LeftMotorButton_Click(object sender, RoutedEventArgs e)
-        {
-            GpioStatus.Text = "Virtual Putt Putt Bang. Left Motor not implemented yet.";
-        }
 
-        private void RightMotorButton_Click(object sender, RoutedEventArgs e)
+
+        //private void RightMotorButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    GpioStatus.Text = "Virtual Vroom! Right Motor not implemented yet.";
+        //}
+
+        private void BlueMotorButton_Click(object sender, RoutedEventArgs e)
         {
-            GpioStatus.Text = "Virtual Vroom! Right Motor not implemented yet.";
+            if (BlueMotorPinState == GpioPinValue.High)
+            {
+                SetState(BlueMotorPin, GpioPinValue.Low);
+                BlueMotorPinState = GpioPinValue.Low;
+                BlueMotorButton.Background = BlueOnBrush;
+            }
+            else
+            {
+                SetState(BlueMotorPin, GpioPinValue.High);
+                BlueMotorPinState = GpioPinValue.High;
+                BlueMotorButton.Background = BlueOffBrush;
+            }
         }
     }
 }

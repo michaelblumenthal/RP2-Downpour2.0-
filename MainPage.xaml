@@ -30,20 +30,26 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="847,99,326,199" Width="267" Height="662">
-            <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="10,50,0,10" TextAlignment="Center" FontSize="16" Height="601" Width="247" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="237*"/>
+            <ColumnDefinition Width="83*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="800,33,246,66" Width="253" Height="621" Grid.ColumnSpan="2">
+            <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="5,5,5,5" TextAlignment="Center" FontSize="16" Height="590" Width="220" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" />
         </StackPanel>
         <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="42,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="RedButton_Click"/>
         <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="559,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="BlueButton_Click"/>
         <Button x:Name="GreenButton" Content="Green" HorizontalAlignment="Left" Margin="297,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#334AB628" Click="GreenButton_Click"/>
         <TextBox x:Name="RedHashtagBox" HorizontalAlignment="Left" Margin="42,440,0,0" TextWrapping="Wrap" Text="Red Votes" VerticalAlignment="Top" Width="217" PlaceholderText="Red" IsReadOnly="True" BorderBrush="Black"/>
         <TextBox x:Name="BlueHashtagBox" HorizontalAlignment="Left" Margin="554,440,0,0" TextWrapping="Wrap" Text="Blue Votes" VerticalAlignment="Top" Width="217" PlaceholderText="Blue" BorderBrush="Black" IsReadOnly="True"/>
-        <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="297,477,0,0" TextWrapping="Wrap" Text="1 " VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
+        <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="297,477,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
         <Button x:Name="GoButton" Content="Go" HorizontalAlignment="Left" Height="112" Margin="297,545,0,0" VerticalAlignment="Top" Width="217" Click="GoButton_Click"/>
         <TextBox x:Name="RedTweetCountBox" HorizontalAlignment="Left" Margin="42,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Red Tweet Count"/>
         <TextBox x:Name="BlueTweetCountBox" HorizontalAlignment="Left" Margin="559,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Blue Tweet Count"/>
-        <Button x:Name="LeftMotorButton" Content="Left Motor" HorizontalAlignment="Left" Margin="42,223,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="LeftMotorButton_Click"/>
-        <Button x:Name="RightMotorButton" Content="Right Motor" HorizontalAlignment="Left" Margin="559,223,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="RightMotorButton_Click"/>
-        <TextBlock x:Name="VotingInvervalLabel" HorizontalAlignment="Left" Margin="297,440,0,0" TextWrapping="Wrap" Text="Voting Time in Minutes" VerticalAlignment="Top" Height="20" Width="257"/>
+        <TextBlock x:Name="VotingInvervalLabel" HorizontalAlignment="Left" Margin="297,440,0,0" TextWrapping="Wrap" Text="Voting Time in Seconds" VerticalAlignment="Top" Height="20" Width="257"/>
+        <TextBox x:Name="RestUrlBox" HorizontalAlignment="Left" Margin="42,208,0,0" TextWrapping="Wrap" Text="https://michaelbl.outsystemscloud.com/RaspberryPiVote/rest/Vote/GetCounts" VerticalAlignment="Top" Width="729"/>
+        <Button x:Name="BlueMotorButton" Content="Blue Motor" HorizontalAlignment="Left" Background="#330C5BF6" Height="126" Margin="559,278,0,0" VerticalAlignment="Top" Width="212" Click="BlueMotorButton_Click"/>
+        <ToggleSwitch x:Name="VoteCountMode" Header="Mode" HorizontalAlignment="Left" Margin="293,304,0,0" VerticalAlignment="Top" Height="73" Width="221" OffContent="Local" OnContent="REST API" HorizontalContentAlignment="Left"/>
+        <TextBlock x:Name="debugText" HorizontalAlignment="Left" Margin="42,278,0,0" TextWrapping="Wrap" Text="Init" VerticalAlignment="Top" Height="126" Width="181"/>
     </Grid>
 </Page>
