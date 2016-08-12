@@ -40,16 +40,17 @@
         <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="42,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="RedButton_Click"/>
         <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="559,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="BlueButton_Click"/>
         <Button x:Name="GreenButton" Content="Green" HorizontalAlignment="Left" Margin="297,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#334AB628" Click="GreenButton_Click"/>
-        <TextBox x:Name="RedHashtagBox" HorizontalAlignment="Left" Margin="42,440,0,0" TextWrapping="Wrap" Text="Red Votes" VerticalAlignment="Top" Width="217" PlaceholderText="Red" IsReadOnly="True" BorderBrush="Black"/>
+        <TextBox x:Name="RedHashtagBox" HorizontalAlignment="Left" Margin="42,577,0,0" TextWrapping="Wrap" Text="Red Votes" VerticalAlignment="Top" Width="217" PlaceholderText="Red" IsReadOnly="True" BorderBrush="Black"/>
         <TextBox x:Name="BlueHashtagBox" HorizontalAlignment="Left" Margin="554,440,0,0" TextWrapping="Wrap" Text="Blue Votes" VerticalAlignment="Top" Width="217" PlaceholderText="Blue" BorderBrush="Black" IsReadOnly="True"/>
         <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="297,477,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
         <Button x:Name="GoButton" Content="Go" HorizontalAlignment="Left" Height="112" Margin="297,545,0,0" VerticalAlignment="Top" Width="217" Click="GoButton_Click"/>
-        <TextBox x:Name="RedTweetCountBox" HorizontalAlignment="Left" Margin="42,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Red Tweet Count"/>
+        <TextBox x:Name="RedTweetCountBox" HorizontalAlignment="Left" Margin="42,614,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Red Tweet Count"/>
         <TextBox x:Name="BlueTweetCountBox" HorizontalAlignment="Left" Margin="559,477,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="217" PlaceholderText="Blue Tweet Count"/>
         <TextBlock x:Name="VotingInvervalLabel" HorizontalAlignment="Left" Margin="297,440,0,0" TextWrapping="Wrap" Text="Voting Time in Seconds" VerticalAlignment="Top" Height="20" Width="257"/>
-        <TextBox x:Name="RestUrlBox" HorizontalAlignment="Left" Margin="42,208,0,0" TextWrapping="Wrap" Text="https://michaelbl.outsystemscloud.com/RaspberryPiVote/rest/Vote/GetCounts" VerticalAlignment="Top" Width="729"/>
+        <TextBox x:Name="RestUrlBox" HorizontalAlignment="Left" Margin="42,208,0,0" TextWrapping="Wrap" Text="https://michaelbl.outsystemscloud.com/RaspberryPiVote/rest/VoteService/GetCounts" VerticalAlignment="Top" Width="729"/>
         <Button x:Name="BlueMotorButton" Content="Blue Motor" HorizontalAlignment="Left" Background="#330C5BF6" Height="126" Margin="559,278,0,0" VerticalAlignment="Top" Width="212" Click="BlueMotorButton_Click"/>
-        <ToggleSwitch x:Name="VoteCountMode" Header="Mode" HorizontalAlignment="Left" Margin="293,304,0,0" VerticalAlignment="Top" Height="73" Width="221" OffContent="Local" OnContent="REST API" HorizontalContentAlignment="Left"/>
+        <ToggleSwitch x:Name="VoteCountMode" Header="Mode" HorizontalAlignment="Left" Margin="293,278,0,0" VerticalAlignment="Top" Height="73" Width="221" OffContent="Local" OnContent="REST API" HorizontalContentAlignment="Left"/>
         <TextBlock x:Name="debugText" HorizontalAlignment="Left" Margin="42,278,0,0" TextWrapping="Wrap" Text="Init" VerticalAlignment="Top" Height="126" Width="181"/>
+        <StackPanel HorizontalAlignment="Left" Height="100" Margin="112,347,0,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </Page>

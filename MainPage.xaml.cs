@@ -178,8 +178,7 @@ namespace Blumenthalit.SocialUproar
                     BlueVoteCount = (new Random(int.Parse(DateTime.Now.ToString("ss"))+1)).Next(100);
                 }
 
-            RedTweetCountBox.Text = RedVoteCount.ToString();
-            BlueTweetCountBox.Text = BlueVoteCount.ToString();
+            
 
             if (RedVoteCount > BlueVoteCount)
             {
@@ -260,6 +259,8 @@ namespace Blumenthalit.SocialUproar
                 bluenum = bluenum.Substring(0, bluenum.Length - 2);
                 debugText.Text += "\n Bluenum=" + bluenum;
                 int.TryParse(bluenum, out BlueVoteCount);
+                RedTweetCountBox.Text = RedVoteCount.ToString();
+                BlueTweetCountBox.Text = BlueVoteCount.ToString();
             }
             catch (Exception ex)
             {
