@@ -15,17 +15,17 @@ namespace Blumenthalit.SocialUproar
         private const int GREEN_PIN = 6;
         private const int BLUE_PIN = 13;
         private const int LEFT_MOTOR_PIN = 19;
-        private const int RIGHT_MOTOR_PIN = 20;
+        private const int RIGHT_MOTOR_PIN = 26;
         private GpioPinValue RedPinState = GpioPinValue.High;
         private GpioPinValue GreenPinState = GpioPinValue.High;
         private GpioPinValue BluePinState = GpioPinValue.High;
-        private GpioPinValue BlueMotorPinState = GpioPinValue.High;
-        //private GpioPinValue RightMotorPinState = GpioPinValue.High;
+        private GpioPinValue BlueMotorPinState = GpioPinValue.Low;
+        private GpioPinValue RedMotorPinState = GpioPinValue.Low;
         private GpioPin RedPin;
         private GpioPin GreenPin;
         private GpioPin BluePin;
         private GpioPin BlueMotorPin;
-     //   private GpioPin RightMotorPin;
+        private GpioPin RedMotorPin;
         private SolidColorBrush VotingOpenBrush = new SolidColorBrush(Windows.UI.Colors.LimeGreen);
         private SolidColorBrush VotingClosedBrush = new SolidColorBrush(Windows.UI.Colors.DarkGreen);
         private SolidColorBrush RedOnBrush = new SolidColorBrush(Windows.UI.Colors.Red);
@@ -46,7 +46,7 @@ namespace Blumenthalit.SocialUproar
             GreenPin = initPin(GREEN_PIN);
             BluePin = initPin(BLUE_PIN);
             BlueMotorPin = initPin(LEFT_MOTOR_PIN);
-//            RightMotorPin = initPin(RIGHT_MOTOR_PIN);
+            RedMotorPin = initPin(RIGHT_MOTOR_PIN);
 
             SetState(RedPin, GpioPinValue.High);
             SetState(GreenPin, GpioPinValue.High);
@@ -273,10 +273,21 @@ namespace Blumenthalit.SocialUproar
 
 
 
-        //private void RightMotorButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    GpioStatus.Text = "Virtual Vroom! Right Motor not implemented yet.";
-        //}
+        private void RightMotorButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (RedMotorPinState == GpioPinValue.High)
+            {
+                SetState(RedMotorPin, GpioPinValue.Low);
+                RedMotorPinState = GpioPinValue.Low;
+                RedMotorButton.Background = RedOnBrush;
+            }
+            else
+            {
+                SetState(RedMotorPin, GpioPinValue.High);
+                RedMotorPinState = GpioPinValue.High;
+                RedMotorButton.Background = RedOffBrush;
+            }
+        }
 
         private void BlueMotorButton_Click(object sender, RoutedEventArgs e)
         {
@@ -292,6 +303,11 @@ namespace Blumenthalit.SocialUproar
                 BlueMotorPinState = GpioPinValue.High;
                 BlueMotorButton.Background = BlueOffBrush;
             }
+        }
+
+        private void RedMotorButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
