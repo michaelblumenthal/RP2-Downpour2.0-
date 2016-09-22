@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="Blinky" Publisher="CN=Microsoft" Version="1.0.0.0" />
+  <Identity Name="PiVote" Publisher="CN=&quot;CN=PSCGroupLLC&quot;" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="d57ab936-9c60-4857-af7f-911f928e38ab" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Blinky</DisplayName>
+    <DisplayName>PiVote</DisplayName>
     <PublisherDisplayName>PSCGroupLLC</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -14,8 +14,8 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Blinky.App">
-      <uap:VisualElements DisplayName="Blinky" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Blinky" BackgroundColor="transparent">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PiVote.App">
+      <uap:VisualElements DisplayName="PiVote" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Voting Simulator for demonstrating integrating data from the internet with control of lights and motors." BackgroundColor="transparent">
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>

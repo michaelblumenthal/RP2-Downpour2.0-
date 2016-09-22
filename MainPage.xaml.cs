@@ -5,6 +5,9 @@ using Windows.Devices.Gpio;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 
 namespace Blumenthalit.SocialUproar
@@ -20,18 +23,13 @@ namespace Blumenthalit.SocialUproar
 
         webResults baselineResults = new webResults();
         webResults votingResults = new webResults();
-     
+
 
         private const int RED_PIN = 5;
         private const int GREEN_PIN = 6;
         private const int BLUE_PIN = 13;
         private const int LEFT_MOTOR_PIN = 19;
         private const int RIGHT_MOTOR_PIN = 20;
-        private GpioPinValue RedPinState = GpioPinValue.High;
-        private GpioPinValue GreenPinState = GpioPinValue.High;
-        private GpioPinValue BluePinState = GpioPinValue.High;
-        private GpioPinValue BlueMotorPinState = GpioPinValue.Low;
-        private GpioPinValue RedMotorPinState = GpioPinValue.Low;
         private GpioPin RedPin;
         private GpioPin GreenPin;
         private GpioPin BluePin;
@@ -49,7 +47,7 @@ namespace Blumenthalit.SocialUproar
 
         private bool isInternetVote = false;
 
-       
+
 
         public MainPage()
         {
@@ -106,48 +104,42 @@ namespace Blumenthalit.SocialUproar
 
         private void RedButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RedPinState == GpioPinValue.High)
+            if (RedPin.Read() == GpioPinValue.High)
             {
                 SetState(RedPin, GpioPinValue.Low);
-                RedPinState = GpioPinValue.Low;
-                RedButton.Background = RedOffBrush;
+                RedButton.Background = RedOnBrush;
             }
             else
             {
                 SetState(RedPin, GpioPinValue.High);
-                RedPinState = GpioPinValue.High;
-                RedButton.Background = RedOnBrush;
+                RedButton.Background = RedOffBrush;
             }
         }
 
         private void GreenButton_Click(object sender, RoutedEventArgs e)
         {
-            if (GreenPinState == GpioPinValue.High)
+            if (GreenPin.Read() == GpioPinValue.High)
             {
                 SetState(GreenPin, GpioPinValue.Low);
-                GreenPinState = GpioPinValue.Low;
                 GreenButton.Background = VotingOpenBrush;
             }
             else
             {
                 SetState(GreenPin, GpioPinValue.High);
-                GreenPinState = GpioPinValue.High;
                 GreenButton.Background = VotingClosedBrush;
             }
         }
 
         private void BlueButton_Click(object sender, RoutedEventArgs e)
         {
-            if (BluePinState == GpioPinValue.High)
+            if (BluePin.Read() == GpioPinValue.High)
             {
                 SetState(BluePin, GpioPinValue.Low);
-                BluePinState = GpioPinValue.Low;
                 BlueButton.Background = BlueOnBrush;
             }
             else
             {
                 SetState(BluePin, GpioPinValue.High);
-                BluePinState = GpioPinValue.High;
                 BlueButton.Background = BlueOffBrush;
             }
         }
@@ -159,13 +151,23 @@ namespace Blumenthalit.SocialUproar
             RedButton.Background = RedOffBrush;
             SetState(BluePin, GpioPinValue.High);
             BlueButton.Background = BlueOffBrush;
-            GoButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 25, 25, 25));
+           
+            SetState(RedMotorPin, GpioPinValue.Low);
+            SetState(BlueMotorPin, GpioPinValue.Low);
 
+            GoButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 25, 25, 25));
             SetState(GreenPin, GpioPinValue.Low);
-          
-            getBaselineVotes();
             votingResults.RedVotes = -1;
             votingResults.BlueVotes = -1;
+
+            RedPrevCount.Text = "";
+            BluePrevCount.Text = "";
+            RedCurrentCount.Text = "";
+            BlueCurrentCount.Text = "";
+            RedVoteCount.Text = "";
+            BlueVoteCount.Text = "";
+
+            getBaselineVotes();
 
             SecondsRemaining = int.Parse(VotingIntervalBox.Text);
             timer = new DispatcherTimer();
@@ -178,9 +180,7 @@ namespace Blumenthalit.SocialUproar
         {
             if (isInternetVote)
             {
-                //TODO read these from the interent
-                baselineResults.RedVotes = 0;
-                baselineResults.BlueVotes = 0;
+                GetCountsFromWeb(ref baselineResults);
 
                 RedPrevCount.Text = baselineResults.RedVotes.ToString();
                 BluePrevCount.Text = baselineResults.BlueVotes.ToString();
@@ -198,18 +198,17 @@ namespace Blumenthalit.SocialUproar
         private void Timer_Tick(object sender, object e)
         {
             SecondsRemaining = SecondsRemaining - 1;
-            CountdownTimer.Text = (TimeSpan.FromSeconds(SecondsRemaining)).ToString("mm:ss");
+            CountdownTimer.Text = (TimeSpan.FromSeconds(SecondsRemaining)).ToString("c");
             if (SecondsRemaining == 0)
             {
                 timer.Stop();
                 SetState(GreenPin, GpioPinValue.High);
-                GreenPinState = GpioPinValue.High;
                 GoButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 7, 139, 7));
                 getNewVotes();
             }
         }
 
-       
+
         private void getNewVotes()
         {
             int RedVotes = 0;
@@ -217,23 +216,31 @@ namespace Blumenthalit.SocialUproar
 
             if (isInternetVote)
             {
-               GetCountsFromWeb();//this sets VotingResults
+                GetCountsFromWeb(ref votingResults);//this sets VotingResults
                 if (votingResults.BlueVotes == -1)
                 {
                     debugText.Text += "Web call returned, but without data.";
                 }
                 RedCurrentCount.Text = votingResults.RedVotes.ToString();
                 BlueCurrentCount.Text = votingResults.BlueVotes.ToString();
-                RedVotes = votingResults.RedVotes - baselineResults.RedVotes;
-                BlueVotes = votingResults.BlueVotes - baselineResults.BlueVotes;
+                if (votingResults.RedVotes == baselineResults.RedVotes && votingResults.BlueVotes == baselineResults.BlueVotes)
+                {
+                    RedVotes = votingResults.RedVotes;
+                    BlueVotes = votingResults.BlueVotes;
+                }
+                else
+                {
+                    RedVotes = votingResults.RedVotes - baselineResults.RedVotes;
+                    BlueVotes = votingResults.BlueVotes - baselineResults.BlueVotes;
+                }
                 RedVoteCount.Text = RedVotes.ToString();
                 BlueVoteCount.Text = BlueVotes.ToString();
             }
             else
             {
 
-                RedVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(100);
-                BlueVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(100);
+                RedVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(5,75);
+                BlueVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(75,150);
                 RedCurrentCount.Text = RedVotes.ToString();
                 BlueCurrentCount.Text = BlueVotes.ToString();
                 RedVoteCount.Text = RedCurrentCount.Text;
@@ -241,16 +248,11 @@ namespace Blumenthalit.SocialUproar
 
             }
 
-
-
-
             if (RedVotes > BlueVotes)
             {
                 SetState(RedPin, GpioPinValue.Low);
-                RedPinState = GpioPinValue.Low;
-                //              SetState(RightMotorPin, GpioPinValue.High);
+                SetState(RedMotorPin, GpioPinValue.High);
                 SetState(BlueMotorPin, GpioPinValue.Low);
-                BlueMotorPinState = GpioPinValue.Low;
                 RedButton.Background = RedOnBrush;
                 BlueButton.Background = BlueOffBrush;
             }
@@ -258,8 +260,6 @@ namespace Blumenthalit.SocialUproar
             {
                 SetState(BluePin, GpioPinValue.Low);
                 SetState(BlueMotorPin, GpioPinValue.High);
-                BluePinState = GpioPinValue.Low;
-                BlueMotorPinState = GpioPinValue.High;
                 RedButton.Background = RedOffBrush;
                 BlueButton.Background = BlueOnBrush;
             }
@@ -267,24 +267,22 @@ namespace Blumenthalit.SocialUproar
             if (RedVotes == BlueVotes)
             {
                 SetState(RedPin, GpioPinValue.Low);
-                //                SetState(RightMotorPin, GpioPinValue.High);
+                SetState(RedMotorPin, GpioPinValue.High);
                 SetState(BluePin, GpioPinValue.Low);
                 SetState(BlueMotorPin, GpioPinValue.High);
-                BluePinState = GpioPinValue.Low;
-                BlueMotorPinState = GpioPinValue.High;
                 BlueButton.Background = BlueOnBrush;
                 RedButton.Background = RedOnBrush;
             }
 
         }
 
-        private async void GetCountsFromWeb()
+        private  void GetCountsFromWeb(ref webResults VoteColorPair)
         {
             //Create an HTTP client object
-            Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
-
+            // Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
+            System.Net.Http.HttpClient snhClient = new System.Net.Http.HttpClient();
             //Add a user-agent header to the GET request. 
-            var headers = httpClient.DefaultRequestHeaders;
+            var headers = snhClient.DefaultRequestHeaders;
 
             //The safe way to add a header value is to use the TryParseAdd method and verify the return value is true,
             //especially if the header value is coming from user input.
@@ -303,30 +301,50 @@ namespace Blumenthalit.SocialUproar
             Uri requestUri = new Uri(RestUrlBox.Text);
 
             //Send the GET request asynchronously and retrieve the response as a string.
-            Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
+            System.Net.Http.HttpResponseMessage snhResponse = new System.Net.Http.HttpResponseMessage();
+   
+           // Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
             string httpResponseBody = "";
 
             try
             {
+                int Reds = -1;
+                int Blues = -1;
+
                 //Send the GET request
-                httpResponse = await httpClient.GetAsync(requestUri);
-                httpResponse.EnsureSuccessStatusCode();
-                httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                snhResponse = snhClient.GetAsync(requestUri).Result;
+                //httpResponse =  await httpClient.GetAsync(requestUri,Windows.Web.Http.HttpCompletionOption.ResponseContentRead).Re;
+                snhResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
+                //httpResponseBody = httpResponse.Content.ToString();
+                httpResponseBody = snhResponse.Content.ReadAsStringAsync().Result;
                 debugText.Text += httpResponseBody;
-                string rednum = httpResponseBody.Substring("[{\"Color\":\"Red\",\"Count\":".Length);
-                string blunum = rednum;
-                int curlyLoc = rednum.IndexOf("}");
-                rednum = rednum.Substring(0, curlyLoc);
-                debugText.Text = "Rednum=" + rednum;
-                int Reds;
-                int Blues;
-                int.TryParse(rednum, out Reds);
-                string bluenum = blunum.Substring(curlyLoc + 2 + "{\"Color\":\"Blue\",\"Count\":".Length);
-                bluenum = bluenum.Substring(0, bluenum.Length - 2);
-                debugText.Text += "\n Bluenum=" + bluenum;
-                int.TryParse(bluenum, out Blues);
-                votingResults.RedVotes = Reds;
-                votingResults.BlueVotes = Blues;
+                int blueCloseCurlyLoc = httpResponseBody.IndexOf("}");
+                string bluestring = httpResponseBody.Substring(0, blueCloseCurlyLoc);
+                int lastColonLoc = bluestring.LastIndexOf(":");
+                bluestring = bluestring.Substring(lastColonLoc+1, blueCloseCurlyLoc - lastColonLoc-1);
+                Blues = int.Parse(bluestring);
+
+                int redCloseCurlyLoc = httpResponseBody.LastIndexOf("}");
+                string redstring = httpResponseBody.Substring(blueCloseCurlyLoc+1, redCloseCurlyLoc - blueCloseCurlyLoc);
+                lastColonLoc = redstring.LastIndexOf(":");
+                redCloseCurlyLoc = redstring.LastIndexOf("}");
+                redstring = redstring.Substring(lastColonLoc + 1, redCloseCurlyLoc - lastColonLoc - 1);
+                Reds = int.Parse(redstring);
+
+                /*                JObject voteJson = JObject.Parse(httpResponseBody);
+                if (voteJson[0]["Color"].ToString() == "Blue")
+                {
+                    Blues = int.Parse(voteJson[0]["Count"].ToString());
+                }
+                if (voteJson[1]["Color"].ToString() == "Red")
+                {
+                    Reds = int.Parse(voteJson[1]["Count"].ToString());
+                }
+*/
+
+                VoteColorPair.RedVotes = Reds;
+                VoteColorPair.BlueVotes = Blues;
             }
             catch (Exception ex)
             {
@@ -341,32 +359,28 @@ namespace Blumenthalit.SocialUproar
 
         private void RedMotorButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RedMotorPinState == GpioPinValue.High)
+            if (RedMotorPin.Read() == GpioPinValue.High )
             {
                 SetState(RedMotorPin, GpioPinValue.Low);
-                RedMotorPinState = GpioPinValue.Low;
                 RedMotorButton.Background = RedOnBrush;
             }
             else
             {
                 SetState(RedMotorPin, GpioPinValue.High);
-                RedMotorPinState = GpioPinValue.High;
                 RedMotorButton.Background = RedOffBrush;
             }
         }
 
         private void BlueMotorButton_Click(object sender, RoutedEventArgs e)
         {
-            if (BlueMotorPinState == GpioPinValue.High)
+            if (BlueMotorPin.Read() == GpioPinValue.High)
             {
                 SetState(BlueMotorPin, GpioPinValue.Low);
-                BlueMotorPinState = GpioPinValue.Low;
                 BlueMotorButton.Background = BlueOffBrush;
             }
             else
             {
                 SetState(BlueMotorPin, GpioPinValue.High);
-                BlueMotorPinState = GpioPinValue.High;
                 BlueMotorButton.Background = BlueOnBrush;
             }
         }
@@ -376,13 +390,47 @@ namespace Blumenthalit.SocialUproar
             if (VoteCountMode.IsOn)
             {
                 isInternetVote = true;
-                VoteModeTextbox.Text = "Internet";
+
             }
             else
             {
                 isInternetVote = false;
-                VoteModeTextbox.Text = "local";
+
             }
+        }
+
+
+        private void rootPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine(rootPivot.SelectedIndex + ":" + ((PivotItem)(rootPivot.SelectedItem)).Name);
+                if (((PivotItem)(rootPivot.SelectedItem)).Name == "Vote")
+                {
+
+                    if (isInternetVote)
+                    {
+                        VoteModeTextbox.Text = "Internet";
+                    }
+                    else
+                    {
+                        VoteModeTextbox.Text = "local";
+                    }
+                    SecondsRemaining = int.Parse(VotingIntervalBox.Text);
+                    CountdownTimer.Text = (TimeSpan.FromSeconds(SecondsRemaining)).ToString("c");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Write(ex.Message);
+                debugText.Text += ex.Message;
+            }
+        }
+
+        private void HurryUp_Click(object sender, RoutedEventArgs e)
+        {
+            if (SecondsRemaining > 5) { SecondsRemaining = 5; }
         }
     }
 }
+

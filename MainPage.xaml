@@ -34,28 +34,28 @@
             <ColumnDefinition Width="237*"/>
             <ColumnDefinition Width="83*"/>
         </Grid.ColumnDefinitions>
-        <Pivot x:Name="rootPivot" Title="Raspberry Pi Running Windows 10 IoT Core: Pi Vote">
-            <PivotItem Header="Configure">
+        <Pivot x:Name="rootPivot" Title="Raspberry Pi Running Windows 10 IoT Core: Pi Vote" SelectionChanged="rootPivot_SelectionChanged">
+            <PivotItem Header="Configure" Name="Config">
                 <Grid>
                     <TextBlock x:Name="VotingInvervalLabel" HorizontalAlignment="Left" Margin="52,206,0,0" TextWrapping="Wrap" Text="Voting Time in Seconds" VerticalAlignment="Top" Height="20" Width="257"/>
-                    <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="247,194,0,0" TextWrapping="Wrap" Text="60" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
+                    <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="247,194,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
                     <TextBox x:Name="RestUrlBox" HorizontalAlignment="Left" Margin="48,37,0,0" TextWrapping="Wrap" Text="https://michaelbl.outsystemscloud.com/RaspberryPiVote/rest/VoteService/GetCounts" VerticalAlignment="Top" Width="729"/>
                     <ToggleSwitch x:Name="VoteCountMode" Header="Mode" HorizontalAlignment="Left" Margin="48,110,0,0" VerticalAlignment="Top" Height="73" Width="221" OffContent="Local" OnContent="Internet" HorizontalContentAlignment="Left" IsOn="True" Toggled="VoteCountMode_Toggled"/>
 
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Test">
+            <PivotItem Header="Test" Name="Test">
                 <Grid>
-                    <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="42,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#33D92828" Click="RedButton_Click"/>
-                    <Button x:Name="GreenButton" Content="Green" HorizontalAlignment="Left" Margin="297,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#334AB628" Click="GreenButton_Click"/>
-                    <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="559,48,0,0" VerticalAlignment="Top" Height="127" Width="217" Background="#330C5BF6" Click="BlueButton_Click"/>
-                    <Button x:Name="BlueMotorButton" Content="Blue Motor" HorizontalAlignment="Left" Background="#330C5BF6" Height="126" Margin="559,278,0,0" VerticalAlignment="Top" Width="212" Click="BlueMotorButton_Click"/>
-                    <Button x:Name="RedMotorButton" Content="Red Motor" HorizontalAlignment="Left" Background="DarkRed" Height="126" Margin="20,278,0,0" VerticalAlignment="Top" Width="212" Click="RedMotorButton_Click"/>
+                    <Button x:Name="RedButton" Content="Red" HorizontalAlignment="Left" Margin="20,48,0,0" VerticalAlignment="Top" Height="127" Width="180" Background="#33D92828" Click="RedButton_Click"/>
+                    <Button x:Name="GreenButton" Content="Green" HorizontalAlignment="Left" Margin="258,48,0,0" VerticalAlignment="Top" Height="127" Width="180" Background="#334AB628" Click="GreenButton_Click"/>
+                    <Button x:Name="BlueButton" Content="Blue" HorizontalAlignment="Left" Margin="492,48,0,0" VerticalAlignment="Top" Height="127" Width="180" Background="#330C5BF6" Click="BlueButton_Click"/>
+                    <Button x:Name="BlueMotorButton" Content="Blue Motor" HorizontalAlignment="Left" Background="#330C5BF6" Height="126" Margin="492,278,0,0" VerticalAlignment="Top" Width="180" Click="BlueMotorButton_Click"/>
+                    <Button x:Name="RedMotorButton" Content="Red Motor" HorizontalAlignment="Left" Background="DarkRed" Height="126" Margin="20,278,0,0" VerticalAlignment="Top" Width="180" Click="RedMotorButton_Click"/>
 
                 </Grid>
             </PivotItem>
 
-            <PivotItem Header="Vote">
+            <PivotItem Header="Vote" Name="Vote">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="35*"/>
@@ -64,27 +64,29 @@
                     </Grid.ColumnDefinitions>
                     <Button x:Name="GoButton" Content="Go" HorizontalAlignment="Left" Height="112" Margin="165,53,0,0" VerticalAlignment="Top" Width="217" Click="GoButton_Click" Grid.Column="2" FontSize="48" Background="#FF078B07"/>
 
+                    <Button x:Name="HurryUp" Content="Hurry Up!" FontSize="24" Margin="474,202,0,0" Height="105" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Click="HurryUp_Click"/>
+
                     <TextBox x:Name="RedLabel" HorizontalAlignment="Left" Margin="10,347,0,0" TextWrapping="Wrap" Text="Red Votes" VerticalAlignment="Top" Width="217" PlaceholderText="Red" IsReadOnly="True" BorderBrush="Black" Grid.ColumnSpan="2" Grid.Column="1"/>
                     <TextBox x:Name="BlueLabel" HorizontalAlignment="Left" Margin="412,347,0,0" TextWrapping="Wrap" Text="Blue Votes" VerticalAlignment="Top" Width="217" PlaceholderText="Blue" BorderBrush="Black" IsReadOnly="True" Grid.Column="2"/>
 
-                    <TextBox x:Name="RedPrevCount" HorizontalAlignment="Left" Margin="100,384,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="108" PlaceholderText="Red Tweet Count" Grid.Column="1" Grid.ColumnSpan="2"/>
-                    <TextBox x:Name="BluePrevCount" HorizontalAlignment="Left" Margin="497,384,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="100" PlaceholderText="Blue Tweet Count" Grid.Column="2"/>
-                    <TextBox x:Name="CountdownTimer" Grid.Column="2" HorizontalAlignment="Left" Height="105" Margin="165,199,0,0" TextWrapping="Wrap" Text="00:00" VerticalAlignment="Top" Width="217" AcceptsReturn="True" FontSize="72" TextAlignment="Center"/>
+                    <TextBox x:Name="RedPrevCount" HorizontalAlignment="Left" Margin="100,384,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="108" PlaceholderText="" Grid.Column="1" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="BluePrevCount" HorizontalAlignment="Left" Margin="497,384,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="100" PlaceholderText="" Grid.Column="2"/>
+                    <TextBox x:Name="CountdownTimer" Grid.Column="2" HorizontalAlignment="Left" Height="105" Margin="110,202,0,0" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Top" Width="332" AcceptsReturn="True" FontSize="72" TextAlignment="Center" IsReadOnly="True"/>
                     <TextBox x:Name="RedPrevLabel" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10,384,0,0" TextWrapping="Wrap" Text="Previous:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
-                    <TextBox x:Name="RedCurrentCount" HorizontalAlignment="Left" Margin="100,416,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="108" PlaceholderText="Red Tweet Count" Grid.Column="1" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="RedCurrentCount" HorizontalAlignment="Left" Margin="100,416,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="108" PlaceholderText="" Grid.Column="1" Grid.ColumnSpan="2"/>
                     <TextBox x:Name="RedCurrLabel" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10,416,0,0" TextWrapping="Wrap" Text="Current:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
-                    <TextBox x:Name="RedVoteCount" HorizontalAlignment="Left" Margin="100,453,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="108" PlaceholderText="Red Tweet Count" Grid.Column="1" Grid.ColumnSpan="2"/>
-                    <TextBox x:Name="RedVoteLabel" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10,453,0,0" TextWrapping="Wrap" Text="Change:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
+                    <TextBox x:Name="RedVoteCount" HorizontalAlignment="Left" Margin="100,453,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="108" PlaceholderText="" Grid.Column="1" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="RedVoteLabel" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10,453,0,0" TextWrapping="Wrap" Text="Net:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
                     <TextBox x:Name="BluePrevLabel" Grid.Column="2" HorizontalAlignment="Left" Height="32" Margin="412,384,0,0" TextWrapping="Wrap" Text="Previous:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
-                    <TextBox x:Name="BlueCurrentCount" HorizontalAlignment="Left" Margin="497,416,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="100" PlaceholderText="Blue Tweet Count" Grid.Column="2"/>
+                    <TextBox x:Name="BlueCurrentCount" HorizontalAlignment="Left" Margin="497,416,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="100" PlaceholderText="" Grid.Column="2"/>
                     <TextBox x:Name="BlueCurrLabel" Grid.Column="2" HorizontalAlignment="Left" Height="32" Margin="412,416,0,0" TextWrapping="Wrap" Text="Current:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
-                    <TextBox x:Name="BlueVoteCount" HorizontalAlignment="Left" Margin="497,453,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="100" PlaceholderText="Blue Tweet Count" Grid.Column="2"/>
-                    <TextBox x:Name="BlueVotesLable" Grid.Column="2" HorizontalAlignment="Left" Height="32" Margin="412,453,0,0" TextWrapping="Wrap" Text="Change:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
+                    <TextBox x:Name="BlueVoteCount" HorizontalAlignment="Left" Margin="497,453,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="100" PlaceholderText="" Grid.Column="2"/>
+                    <TextBox x:Name="BlueVotesLable" Grid.Column="2" HorizontalAlignment="Left" Height="32" Margin="412,453,0,0" TextWrapping="Wrap" Text="Net:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
                     <TextBox x:Name="VoteModeTextbox" HorizontalAlignment="Left" Margin="100,53,0,0" TextWrapping="Wrap" Text="Local or Internet" VerticalAlignment="Top" Width="108" PlaceholderText="Vote Mode" Grid.Column="1" Grid.ColumnSpan="2"/>
-                    <TextBox x:Name="VoteModeLabel" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10,53,0,0" TextWrapping="Wrap" Text="Change:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
+                    <TextBox x:Name="VoteModeLabel" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10,53,0,0" TextWrapping="Wrap" Text="Voting Mode:" VerticalAlignment="Top" Width="85" BorderBrush="Black"/>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Log">
+            <PivotItem Header="Log" Name="Log">
                 <Grid>
                     <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="5,5,5,5" TextAlignment="Center" FontSize="16" Height="590" Width="220" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" />
                     <TextBlock x:Name="debugText" HorizontalAlignment="Left" Margin="292,10,0,0" TextWrapping="Wrap" Text="Init" VerticalAlignment="Top" Height="198" Width="622"/>
