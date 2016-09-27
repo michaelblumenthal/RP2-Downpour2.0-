@@ -155,7 +155,7 @@ namespace Blumenthalit.SocialUproar
             SetState(RedMotorPin, GpioPinValue.Low);
             SetState(BlueMotorPin, GpioPinValue.Low);
 
-            GoButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 25, 25, 25));
+            GoButton.Background = VotingOpenBrush;
             SetState(GreenPin, GpioPinValue.Low);
             votingResults.RedVotes = -1;
             votingResults.BlueVotes = -1;
@@ -203,7 +203,7 @@ namespace Blumenthalit.SocialUproar
             {
                 timer.Stop();
                 SetState(GreenPin, GpioPinValue.High);
-                GoButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 7, 139, 7));
+                GoButton.Background = VotingClosedBrush;
                 getNewVotes();
             }
         }
@@ -239,8 +239,8 @@ namespace Blumenthalit.SocialUproar
             else
             {
 
-                RedVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(5,75);
-                BlueVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(75,150);
+                RedVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(5,50);
+                BlueVotes = (new Random(int.Parse(DateTime.Now.ToString("ss")))).Next(50,100);
                 RedCurrentCount.Text = RedVotes.ToString();
                 BlueCurrentCount.Text = BlueVotes.ToString();
                 RedVoteCount.Text = RedCurrentCount.Text;
@@ -418,6 +418,58 @@ namespace Blumenthalit.SocialUproar
                     }
                     SecondsRemaining = int.Parse(VotingIntervalBox.Text);
                     CountdownTimer.Text = (TimeSpan.FromSeconds(SecondsRemaining)).ToString("c");
+                }
+
+                if (((PivotItem)(rootPivot.SelectedItem)).Name == "Test")
+                {
+
+                    if (BlueMotorPin.Read() == GpioPinValue.High)
+                    {
+                       BlueMotorButton.Background = BlueOnBrush;
+                    }
+                    else
+                    {
+                       BlueMotorButton.Background = BlueOffBrush;
+                    }
+
+
+                    if (RedMotorPin.Read() == GpioPinValue.High)
+                    {
+                        RedMotorButton.Background = RedOnBrush;
+                    }
+                    else
+                    {
+                        RedMotorButton.Background = RedOffBrush;
+                    }
+
+
+                    if (RedPin.Read() == GpioPinValue.High)
+                    {
+                        RedButton.Background = RedOffBrush;
+                    }
+                    else
+                    {
+                        RedButton.Background = RedOnBrush;
+                    }
+
+                    if (BluePin.Read() == GpioPinValue.High)
+                    {
+                        BlueButton.Background = BlueOffBrush;
+                    }
+                    else
+                    {
+                        BlueButton.Background = BlueOnBrush;
+                    }
+
+                    if (GreenPin.Read() == GpioPinValue.High)
+                    {
+                        GreenButton.Background = VotingClosedBrush;
+                    }
+                    else
+                    {
+                        GreenButton.Background = VotingClosedBrush;
+                    }
+
                 }
             }
             catch (Exception ex)
