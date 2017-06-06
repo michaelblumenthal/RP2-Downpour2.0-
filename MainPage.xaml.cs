@@ -14,15 +14,15 @@ namespace Blumenthalit.SocialUproar
 {
     public sealed partial class MainPage : Page
     {
-        class webResults
+        class WebResults
         {
-            public webResults() { }
+            public WebResults() { }
             public int RedVotes;
             public int BlueVotes;
         }
 
-        webResults baselineResults = new webResults();
-        webResults votingResults = new webResults();
+        WebResults baselineResults = new WebResults();
+        WebResults votingResults = new WebResults();
 
 
         private const int RED_PIN = 5;
@@ -276,7 +276,7 @@ namespace Blumenthalit.SocialUproar
 
         }
 
-        private  void GetCountsFromWeb(ref webResults VoteColorPair)
+        private  void GetCountsFromWeb(ref WebResults VoteColorPair)
         {
             //Create an HTTP client object
             // Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
