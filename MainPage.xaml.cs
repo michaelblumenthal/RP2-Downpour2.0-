@@ -51,6 +51,10 @@ namespace Blumenthalit.SocialUproar
 
         public MainPage()
         {
+
+            //BlueMotorPin is the left motor pin and red motor pin is right motor pin
+            //We generally connect the yellow flappy bird to the right side of the case
+            //and the red blower to the left side of the case.
             InitializeComponent();
 
             RedPin = initPin(RED_PIN);
@@ -63,7 +67,7 @@ namespace Blumenthalit.SocialUproar
             SetState(GreenPin, GpioPinValue.High);
             SetState(BluePin, GpioPinValue.High);
             SetState(BlueMotorPin, GpioPinValue.Low);
-            SetState(RedMotorPin, GpioPinValue.Low);
+            SetState(RedMotorPin, GpioPinValue.High);
 
 
         }
@@ -152,7 +156,7 @@ namespace Blumenthalit.SocialUproar
             SetState(BluePin, GpioPinValue.High);
             BlueButton.Background = BlueOffBrush;
            
-            SetState(RedMotorPin, GpioPinValue.Low);
+            SetState(RedMotorPin, GpioPinValue.High);
             SetState(BlueMotorPin, GpioPinValue.Low);
 
             GoButton.Background = VotingOpenBrush;
@@ -251,7 +255,7 @@ namespace Blumenthalit.SocialUproar
             if (RedVotes > BlueVotes)
             {
                 SetState(RedPin, GpioPinValue.Low);
-                SetState(RedMotorPin, GpioPinValue.High);
+                SetState(RedMotorPin, GpioPinValue.Low);
                 SetState(BlueMotorPin, GpioPinValue.Low);
                 RedButton.Background = RedOnBrush;
                 BlueButton.Background = BlueOffBrush;
@@ -260,6 +264,7 @@ namespace Blumenthalit.SocialUproar
             {
                 SetState(BluePin, GpioPinValue.Low);
                 SetState(BlueMotorPin, GpioPinValue.High);
+                SetState(RedMotorPin, GpioPinValue.High);
                 RedButton.Background = RedOffBrush;
                 BlueButton.Background = BlueOnBrush;
             }
@@ -267,7 +272,7 @@ namespace Blumenthalit.SocialUproar
             if (RedVotes == BlueVotes)
             {
                 SetState(RedPin, GpioPinValue.Low);
-                SetState(RedMotorPin, GpioPinValue.High);
+                SetState(RedMotorPin, GpioPinValue.Low);
                 SetState(BluePin, GpioPinValue.Low);
                 SetState(BlueMotorPin, GpioPinValue.High);
                 BlueButton.Background = BlueOnBrush;
@@ -433,7 +438,7 @@ namespace Blumenthalit.SocialUproar
                     }
 
 
-                    if (RedMotorPin.Read() == GpioPinValue.High)
+                    if (RedMotorPin.Read() == GpioPinValue.Low)
                     {
                         RedMotorButton.Background = RedOnBrush;
                     }
@@ -482,6 +487,40 @@ namespace Blumenthalit.SocialUproar
         private void HurryUp_Click(object sender, RoutedEventArgs e)
         {
             if (SecondsRemaining > 5) { SecondsRemaining = 5; }
+        }
+
+        private void LeftMotorPinNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //Not Tested yet
+        {
+            ChangeMotorPin(BlueMotorPin, (int)e.AddedItems[0],"Blue Motor Pin");
+        }
+
+        private void ChangeMotorPin(GpioPin MotorPin, int newPinNumber, string DescriptivePinName)
+        {
+            var gpio = GpioController.GetDefault();
+            if (gpio == null)
+            {
+                // Show an error if there is no GPIO controller
+                GpioStatus.Text = "There is no GPIO controller on this device.";
+                throw new Exception(GpioStatus.Text);
+
+            }
+            GpioOpenStatus status;
+            MotorPin.Dispose();
+            gpio.TryOpenPin(newPinNumber, GpioSharingMode.Exclusive,  out MotorPin, out status);
+            if (status == GpioOpenStatus.PinOpened)
+            {
+                debugText.Text += DescriptivePinName + " set to " + newPinNumber.ToString();
+            }
+            else
+            {
+                debugText.Text += "Pin failed to open.  Status is " + status.ToString() +".";
+            }
+        }
+
+        private void RightMotorPinNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ChangeMotorPin(RedMotorPin, (int)e.AddedItems[0], "Red Motor Pin");
         }
     }
 }

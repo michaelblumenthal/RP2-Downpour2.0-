@@ -39,10 +39,10 @@
                 <Grid>
                     <TextBlock x:Name="VotingInvervalLabel" HorizontalAlignment="Left" Margin="52,206,0,0" TextWrapping="Wrap" Text="Voting Time in Seconds" VerticalAlignment="Top" Height="20" Width="257"/>
                     <TextBox x:Name="VotingIntervalBox" HorizontalAlignment="Left" Margin="247,194,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="217" InputScope="Digits" PlaceholderText="Voting Interval"/>
-                    <TextBox x:Name="RestUrlBox" HorizontalAlignment="Left" Margin="48,37,0,0" TextWrapping="Wrap" Text="https://michaelbl.outsystemscloud.com/RaspberryPiVote/rest/VoteService/GetCounts" VerticalAlignment="Top" Width="729"/>
+                    <TextBox x:Name="RestUrlBox" HorizontalAlignment="Left" Margin="48,37,0,0" TextWrapping="Wrap" Text="https://michaelbl.outsystemscloud.com/RaspberryPiVote/rest/VoteService/GetCounts" VerticalAlignment="Top" Width="676"/>
                     <ToggleSwitch x:Name="VoteCountMode" Header="Mode" HorizontalAlignment="Left" Margin="48,110,0,0" VerticalAlignment="Top" Height="73" Width="221" OffContent="Local" OnContent="Internet" HorizontalContentAlignment="Left" Toggled="VoteCountMode_Toggled"/>
                     <TextBlock x:Name="LeftMotorPinLabel" HorizontalAlignment="Left" Margin="48,310,0,0" TextWrapping="Wrap" Text="Left Motor GPIO Pin #" VerticalAlignment="Top" Height="20" Width="257"/>
-                    <ComboBox Name="LeftMotorPinNumber" HorizontalAlignment="Left" Margin="247,305,0,0" VerticalAlignment="Top" Width="120">
+                    <ComboBox Name="LeftMotorPinNumber" HorizontalAlignment="Left" Margin="247,305,0,0" VerticalAlignment="Top" Width="120" >
                         <ComboBoxItem Content="5"/>
                         <ComboBoxItem Content="6"/>
                         <ComboBoxItem Content="13"/>
@@ -50,7 +50,7 @@
                         <ComboBoxItem Content="26"/>
                     </ComboBox>
                     <TextBlock x:Name="RightMotorPinLabel" HorizontalAlignment="Left" Margin="48,367,0,0" TextWrapping="Wrap" Text="Right Motor GPIO Pin #" VerticalAlignment="Top" Height="20" Width="257"/>
-                    <ComboBox Name="RightMotorPinNumber" HorizontalAlignment="Left" Margin="247,362,0,0" VerticalAlignment="Top" Width="120">
+                    <ComboBox Name="RightMotorPinNumber" HorizontalAlignment="Left" Margin="247,362,0,0" VerticalAlignment="Top" Width="120" >
                         <ComboBoxItem Content="12"/>
                         <ComboBoxItem Content="16"/>
                         <ComboBoxItem Content="20" IsSelected="True"/>
@@ -103,7 +103,7 @@
             <PivotItem Header="Log" Name="Log">
                 <Grid>
                     <TextBlock x:Name="GpioStatus" Text="Waiting to initialize GPIO..." Margin="5,5,5,5" TextAlignment="Center" FontSize="16" Height="590" Width="220" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" />
-                    <TextBlock x:Name="debugText" HorizontalAlignment="Left" Margin="292,10,0,0" TextWrapping="Wrap" Text="Init" VerticalAlignment="Top" Height="198" Width="622"/>
+                    <TextBlock x:Name="debugText" HorizontalAlignment="Left" Margin="292,10,0,0" TextWrapping="Wrap" Text="Init" VerticalAlignment="Top" Height="440" Width="421"/>
                 </Grid>
             </PivotItem>
         </Pivot>
